@@ -131,41 +131,41 @@ spec:
 
         {{- include "snippet.web-deployments.lifecycle" . | nindent 8 }}
 
-        livenessProbe:
-          httpGet:
-            path: /_livez
-            port: {{ .Values.service.internalPort }}
-            scheme: HTTP
-          failureThreshold: {{ .Values.web.livenessProbe.failureThreshold }}
-          initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.web.livenessProbe.periodSeconds }}
-          successThreshold: {{ .Values.web.livenessProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds }}
-        readinessProbe:
-          httpGet:
-            # For readiness, we want to use the checks specific to the events
-            # role, which may be a subset of all the apps dependencies
-            path: /_readyz?role=events
-            port: {{ .Values.service.internalPort }}
-            scheme: HTTP
-          failureThreshold: {{ .Values.web.readinessProbe.failureThreshold }}
-          initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.web.readinessProbe.periodSeconds }}
-          successThreshold: {{ .Values.web.readinessProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
-        startupProbe:
-          httpGet:
-            # Now that capture's only external dependency is Kafka, let's use the
-            # reduced readiness check as its startupProbe. This means that we can
-            # deploy new configs / versions even when Postgres and Redis are down.
-            path: /_readyz?role=events
-            port: {{ .Values.service.internalPort }}
-            scheme: HTTP
-          failureThreshold: {{ .Values.web.startupProbe.failureThreshold }}
-          initialDelaySeconds: {{ .Values.web.startupProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.web.startupProbe.periodSeconds }}
-          successThreshold: {{ .Values.web.startupProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.web.startupProbe.timeoutSeconds }}
+        # livenessProbe:
+        #   httpGet:
+        #     path: /_livez
+        #     port: {{ .Values.service.internalPort }}
+        #     scheme: HTTP
+        #   failureThreshold: {{ .Values.web.livenessProbe.failureThreshold }}
+        #   initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds }}
+        #   periodSeconds: {{ .Values.web.livenessProbe.periodSeconds }}
+        #   successThreshold: {{ .Values.web.livenessProbe.successThreshold }}
+        #   timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds }}
+        # readinessProbe:
+        #   httpGet:
+        #     # For readiness, we want to use the checks specific to the events
+        #     # role, which may be a subset of all the apps dependencies
+        #     path: /_readyz?role=events
+        #     port: {{ .Values.service.internalPort }}
+        #     scheme: HTTP
+        #   failureThreshold: {{ .Values.web.readinessProbe.failureThreshold }}
+        #   initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
+        #   periodSeconds: {{ .Values.web.readinessProbe.periodSeconds }}
+        #   successThreshold: {{ .Values.web.readinessProbe.successThreshold }}
+        #   timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
+        # startupProbe:
+        #   httpGet:
+        #     # Now that capture's only external dependency is Kafka, let's use the
+        #     # reduced readiness check as its startupProbe. This means that we can
+        #     # deploy new configs / versions even when Postgres and Redis are down.
+        #     path: /_readyz?role=events
+        #     port: {{ .Values.service.internalPort }}
+        #     scheme: HTTP
+        #   failureThreshold: {{ .Values.web.startupProbe.failureThreshold }}
+        #   initialDelaySeconds: {{ .Values.web.startupProbe.initialDelaySeconds }}
+        #   periodSeconds: {{ .Values.web.startupProbe.periodSeconds }}
+        #   successThreshold: {{ .Values.web.startupProbe.successThreshold }}
+        #   timeoutSeconds: {{ .Values.web.startupProbe.timeoutSeconds }}
         resources:
         {{ if not .Values.events.resources }}
 {{ toYaml .Values.web.resources | indent 12 }}

@@ -130,7 +130,7 @@ spec:
         {{- include "snippet.redis-env" . | indent 8 }}
 
         # Session Recording Redis env variables (used by real-time playback)
-        {{- include "snippet.session-recording-redis-env" . | nindent 8 }}
+        # {{- include "snippet.session-recording-redis-env" . | nindent 8 }}
 
         # statsd env variables
       {{- include "snippet.statsd-env" . | indent 8 }}
@@ -182,41 +182,41 @@ spec:
 
         {{- include "snippet.web-deployments.lifecycle" . | nindent 8 }}
 
-        livenessProbe:
-          httpGet:
-            path: /_livez
-            port: {{ .Values.service.internalPort }}
-            scheme: HTTP
-          failureThreshold: {{ .Values.web.livenessProbe.failureThreshold }}
-          initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.web.livenessProbe.periodSeconds }}
-          successThreshold: {{ .Values.web.livenessProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds }}
-        readinessProbe:
-          httpGet:
-            # For readiness, we want to use the checks specific to the web
-            # role, which may be a subset of all the apps dependencies
-            path: /_readyz?role=web
-            port: {{ .Values.service.internalPort }}
-            scheme: HTTP
-          failureThreshold: {{ .Values.web.readinessProbe.failureThreshold }}
-          initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.web.readinessProbe.periodSeconds }}
-          successThreshold: {{ .Values.web.readinessProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
-        startupProbe:
-          httpGet:
-            # For startup, we want to make sure that everything is in place,
-            # including postgres. This does however mean we would not be able to
-            # deploy new releases when we have a postgres outage
-            path: /_readyz
-            port: {{ .Values.service.internalPort }}
-            scheme: HTTP
-          failureThreshold: {{ .Values.web.startupProbe.failureThreshold }}
-          initialDelaySeconds: {{ .Values.web.startupProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.web.startupProbe.periodSeconds }}
-          successThreshold: {{ .Values.web.startupProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.web.startupProbe.timeoutSeconds }}
+        # livenessProbe:
+        #   httpGet:
+        #     path: /_livez
+        #     port: {{ .Values.service.internalPort }}
+        #     scheme: HTTP
+        #   failureThreshold: {{ .Values.web.livenessProbe.failureThreshold }}
+        #   initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds }}
+        #   periodSeconds: {{ .Values.web.livenessProbe.periodSeconds }}
+        #   successThreshold: {{ .Values.web.livenessProbe.successThreshold }}
+        #   timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds }}
+        # readinessProbe:
+        #   httpGet:
+        #     # For readiness, we want to use the checks specific to the web
+        #     # role, which may be a subset of all the apps dependencies
+        #     path: /_readyz?role=web
+        #     port: {{ .Values.service.internalPort }}
+        #     scheme: HTTP
+        #   failureThreshold: {{ .Values.web.readinessProbe.failureThreshold }}
+        #   initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
+        #   periodSeconds: {{ .Values.web.readinessProbe.periodSeconds }}
+        #   successThreshold: {{ .Values.web.readinessProbe.successThreshold }}
+        #   timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
+        # startupProbe:
+        #   httpGet:
+        #     # For startup, we want to make sure that everything is in place,
+        #     # including postgres. This does however mean we would not be able to
+        #     # deploy new releases when we have a postgres outage
+        #     path: /_readyz
+        #     port: {{ .Values.service.internalPort }}
+        #     scheme: HTTP
+        #   failureThreshold: {{ .Values.web.startupProbe.failureThreshold }}
+        #   initialDelaySeconds: {{ .Values.web.startupProbe.initialDelaySeconds }}
+        #   periodSeconds: {{ .Values.web.startupProbe.periodSeconds }}
+        #   successThreshold: {{ .Values.web.startupProbe.successThreshold }}
+        #   timeoutSeconds: {{ .Values.web.startupProbe.timeoutSeconds }}
         resources:
 {{ toYaml .Values.web.resources | indent 12 }}
         {{- if .Values.web.securityContext.enabled }}
