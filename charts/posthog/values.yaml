@@ -1650,6 +1650,7 @@ redis:
       - "--maxmemory-policy allkeys-lru"
 
 externalRedis:
+  url: ""
   # -- External Redis host to use.
   host: ""
   # -- External Redis port to use.
